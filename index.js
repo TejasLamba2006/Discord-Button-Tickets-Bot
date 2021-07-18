@@ -353,7 +353,7 @@ To close this ticket, interact with 🔒`)
             if (!ch) return;
             setTimeout(async () => {
               try {
-                await ch.send({ embed: { description: `تم إغلاق التذكرة من قبل <@!${button.clicker.user.id}>`, color: `YELLOW` } });
+                await ch.send({ embed: { description: `The ticket has already been closed<@!${button.clicker.user.id}>`, color: `YELLOW` } });
                 let type = 'member'
                 await Promise.all(ch.permissionOverwrites.filter(o => o.type === type).map(o => o.delete()));
                 ch.setName(`closed-${await ticketschannelsdb.get(`ticket_${ch.id}`).count}`)
