@@ -378,7 +378,7 @@ To close this ticket, interact with 🔒`)
 client.on("ready", async () => {
   await client.user.setActivity(config.status || `Bot Created by Tejas Lamba`)
   console.clear()
-  console.log(`\u001b[38;5;220m-------Tejas Lamba#1924-------\n\u001b[38;5;220m> \x1b[32mﺭﺍﺪﺻﺇ: \x1b[37m1.0\n\u001b[38;5;220m> \x1b[32mﺕﻮﺒﻟﺍ ﺔﻟﺎﺣ: \x1b[37m\x1b[7mﻞﺼﺘﻣ\x1b[0m\n\u001b[38;5;220m------- ﺩﺭﻮﻜﺴﻳﺪﻠﻟ ﺭﺍﺭﺯﺄﺑ ﺮﻛﺍﺬﺗ ﺕﻮﺑ -------\x1b[37m\n\x1b[44mﺮﺸﻨﻟﺍﻭ ﻒﻴﻟﺄﺘﻟﺍ ﻕﻮﻘﺣ:\x1b[0m  \x1b[4mﻰﻟﺇ ﺮﺸﻨﻟﺍ ﻕﻮﻘﺣ ﻊﻴﻤﺟ https://www.shuruhatik.xyz/\x1b[0m \u001b[0m`);
+  console.log(`-------Tejas Lamba#1924-------`);
 })
 
 
