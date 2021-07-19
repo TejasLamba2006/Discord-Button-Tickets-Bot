@@ -308,7 +308,7 @@ client.on('clickButton', async (button) => {
           id: button.clicker.user.id,
           allow: ['VIEW_CHANNEL', `READ_MESSAGE_HISTORY`, `ATTACH_FILES`, `SEND_MESSAGES`],
         },
-      ], parent: config.category_id, position: 1, topic: `A Ticket : <@!${button.clicker.user.id}>`, reason: "All rights reserved to Shuruhatik.xyz"
+      ], parent: config.category_id, position: 1, topic: `A Ticket : <@!${button.clicker.user.id}>`, reason: "All rights reserved to Visa2Code"
     }).then(async channel => {
       channel = channel
       await ticketschannelsdb.set(`ticket_${channel.id}`, { count: count, ticket_by: button.clicker.user.id })
