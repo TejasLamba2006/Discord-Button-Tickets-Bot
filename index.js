@@ -12,8 +12,7 @@ const disbut = require('discord-buttons');
 require('discord-buttons')(client);
 const { MessageMenu, MessageMenuOption } = require('discord-buttons');
 const config = require(`./config.json`)
-const prefix = config.prefix
-const { toke, guild, chan, pa }    = 	   require("./config.json");
+const prefix = config.prefix;
 
 async function channelLog(embed) {
   if (!config.log_channel_id) return;
