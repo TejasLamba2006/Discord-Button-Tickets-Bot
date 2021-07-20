@@ -6,13 +6,13 @@ require("dotenv").config()
 require('discord-reply');
 const { Database } = require("quickmongo");
 const db = new Database(process.env.Mongo)
-
 const randomstring = require("randomstring");
 const disbut = require('discord-buttons');
 require('discord-buttons')(client);
 const { MessageMenu, MessageMenuOption } = require('discord-buttons');
 const config = require(`./config.json`)
-const prefix = config.prefix;
+const prefix = config.prefix
+const { toke, guild, chan, pa }    = 	   require("./config.json");
 
 async function channelLog(embed) {
   if (!config.log_channel_id) return;
@@ -232,8 +232,21 @@ client.on("message", async(message) =>{
     if (message.mentions.roles.length < 2 && !Number(args[0]) && !Number(args[1])) return message.lineReply({ embed: { description: `Please mention an Admin role (or iD) first, *then* a Mod role (or iD) with this command! `, color: 0x5865F2 } })
     const Admin = message.mentions.roles[0] || message.guild.roles.cache.find(args[0]);
     const Moder = message.mentions.roles[1] || message.guild.roles.cache.find(args[1]);
-    await db.set(`Staff_${message.guild.id}.Admin`, args[0])
-    await db.set(`Staff_${message.guild.id}.Moder`, args[1])
+    await db.set(`Staff_${message.guild.id}.Admin`, Admin.id)
+    await db.set(`Staff_${message.guild.id}.Moder`, Moder.id)
+    message.delete()
+    message.react("✅")
+  }
+  if (command == prefix + 'setchannels'){
+    if (!message.member.hasPermission('ADMINISTRATOR')) return message.lineReply(`:x: This command requires \`ADMINISTRATOR\` permission.`);
+    if (args.length < 2) return message.lineReply({ embed: { description: `Please mention an Log Channel (or iD), *then* a Category (or iD) with this command! `, color: 0x5865F2 } })
+    if (message.mentions.roles.length < 2 && !Number(args[0]) && !Number(args[1])) return message.lineReply({ embed: { description: `Please mention an Log Channel (or iD), *then* a Category (or iD) with this command! `, color: 0x5865F2 } })
+    const txt = message.mentions.channels[0] || message.guild.channels.cache.find(args[0]);
+    const cat = message.mentions.channels[1] || message.guild.channels.cache.find(args[1]);
+    if (Admin.type !== "text") return message.channel.send("The first input should be a text channel");
+    if (Moder.type !== "category") return message.channel.send("The second input should be a text category");
+    await db.set(`Channels_${message.guild.id}.Log`, txt.id)
+    await db.set(`Channels_${message.guild.id}.Cat`, cat.id)
     message.delete()
     message.react("✅")
   }
@@ -314,7 +327,7 @@ client.on('clickMenu', async (button) => {
             id: button.clicker.user.id,
             allow: ['VIEW_CHANNEL', `READ_MESSAGE_HISTORY`, `ATTACH_FILES`, `SEND_MESSAGES`],
           },
-        ], parent: config.category_id, position: 1, topic: `A Ticket : <@!${button.clicker.user.id}>`, reason: "All rights reserved to Visa2Code"
+        ], parent: (await db.get(`category_${message.guild.id}`)), position: 1, topic: `A Ticket : <@!${button.clicker.user.id}>`, reason: "All rights reserved to Visa2Code"
       }).then(async channel => {
         channel = channel
         await db.set(`ticket_${channel.id}_${message.guild.id}`, { count: count, ticket_by: button.clicker.user.id })
@@ -366,7 +379,7 @@ client.on('clickMenu', async (button) => {
                 id: button.clicker.user.id,
                 allow: ['VIEW_CHANNEL', `READ_MESSAGE_HISTORY`, `ATTACH_FILES`, `SEND_MESSAGES`],
               },
-            ], parent: config.category_id, position: 1, topic: `A Ticket : <@!${button.clicker.user.id}>`, reason: "All rights reserved to Visa2Code"
+            ], parent: (await db.get(`category_${message.guild.id}`)), position: 1, topic: `A Ticket : <@!${button.clicker.user.id}>`, reason: "All rights reserved to Visa2Code"
           }).then(async channel => {
             channel = channel
             await db.set(`ticket_${channel.id}_${message.guild.id}`, { count: count, ticket_by: button.clicker.user.id })
