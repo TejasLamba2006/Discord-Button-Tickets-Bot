@@ -11,8 +11,7 @@ const disbut = require('discord-buttons');
 require('discord-buttons')(client);
 const { MessageMenu, MessageMenuOption } = require('discord-buttons');
 const config = require(`./config.json`)
-const prefix = config.prefix
-const { toke, guild, chan, pa }    = 	   require("./config.json");
+const prefix = config.prefix;
 
 async function channelLog(embed) {
   if (!config.log_channel_id) return;
@@ -22,6 +21,7 @@ async function channelLog(embed) {
 }
 
 client.on('ready', async () => {
+  await console.clear()
   channelLog(`> The **Bot** is connecting to discord API`)
   console.log(`Made by Tejas Lamba$1924`)
   console.log(`Credits | Visa2Code | https://discord.gg/xtessK2DPA`)
@@ -30,8 +30,8 @@ client.on('ready', async () => {
 });
 client.on("message", async(message) =>{
   if (message.author.bot || !message.guild) return;
-  if (message.guild.id !== guild) return;
-  let command = message.content.toLowerCase().split(" ")[0];
+  let args = message.content.toLowerCase().split(" ");
+  let command = args.shift()
   if (command == prefix + `help`) {
     let embed = new Discord.MessageEmbed()
       .setTitle(`Bot commands list`)
@@ -53,7 +53,7 @@ client.on("message", async(message) =>{
     if (!message.member.hasPermission('MANAGE_MESSAGES')) return message.lineReply(`:x: This command requires \`MANAGE_MESSAGES\` permission.`);
     let args = message.content.split(' ').slice(1).join(' ');
     let channel = message.mentions.channels.first() || message.channel;
-    const sfats = client.db.get(`Staff_${message.guild.id}`)
+    const sfats = await db.get(`Staff_${message.guild.id}`)
     if (!sfats) return message.lineReply({ embed: { description: `this server needs to set up their staff roles first! \`{prefix}setstaff\``, color: 0x5865F2 } })
     if (await db.get(`ticket_${channel.id}_${message.guild.id}`)) {
       let member = message.mentions.members.first() || message.guild.members.cache.get(args || message.guild.members.cache.find(x => x.user.username === args || x.user.username === args));
@@ -86,7 +86,7 @@ client.on("message", async(message) =>{
     if (!message.member.hasPermission('MANAGE_MESSAGES')) return message.lineReply(`:x: This command requires \`MANAGE_MESSAGES\` permission.`);
     let args = message.content.split(' ').slice(1).join(' ');
     let channel = message.mentions.channels.first() || message.channel;
-    const sfats = client.db.get(`Staff_${message.guild.id}`)
+    const sfats = await db.get(`Staff_${message.guild.id}`)
     if (!sfats) return message.lineReply({ embed: { description: `this server needs to set up their staff roles first! \`{prefix}setstaff\``, color: 0x5865F2 } })
     if (await db.get(`ticket_${channel.id}_${message.guild.id}`)) {
       let member = message.mentions.members.first() || message.guild.members.cache.get(args || message.guild.members.cache.find(x => x.user.username === args || x.user.username === args));
@@ -115,7 +115,7 @@ client.on("message", async(message) =>{
   if (command == prefix + 'delete') {
     if (!message.member.hasPermission('MANAGE_MESSAGES')) return message.lineReply(`:x: This command requires \`MANAGE_MESSAGES\` permission.`);
     let channel = message.mentions.channels.first() || message.channel;
-    const sfats = client.db.get(`Staff_${message.guild.id}`)
+    const sfats = await db.get(`Staff_${message.guild.id}`)
     if (!sfats) return message.lineReply({ embed: { description: `this server needs to set up their staff roles first! \`{prefix}setstaff\``, color: 0x5865F2 } })
     if (await db.get(`ticket_${channel.id}_${message.guild.id}`)) {
       message.lineReply({ embed: { description: `Your order is executed after 5 seconds, and it will be closed`, color: 0x5865F2 } })
@@ -136,7 +136,7 @@ client.on("message", async(message) =>{
   if (command == prefix + 'close') {
     if (!message.member.hasPermission('MANAGE_MESSAGES')) return message.lineReply(`:x: This command requires \`MANAGE_MESSAGES\` permission.`);
     let channel = message.mentions.channels.first() || message.channel;
-    const sfats = client.db.get(`Staff_${message.guild.id}`)
+    const sfats = await db.get(`Staff_${message.guild.id}`)
     if (!sfats) return message.lineReply({ embed: { description: `this server needs to set up their staff roles first! \`{prefix}setstaff\``, color: 0x5865F2 } })
     if (await db.get(`ticket_${channel.id}_${message.guild.id}`)) {
       let msg = await message.lineReply({ embed: { description: `Your order is executed after 5 seconds, and it will be closed`, color: 0x5865F2 } })
@@ -146,7 +146,7 @@ client.on("message", async(message) =>{
           channel.send({ embed: { description: `Ticket has been closed by <@!${message.author.id}>`, color: `YELLOW` } })
           let type = 'member'
           await Promise.all(channel.permissionOverwrites.filter(o => o.type === type).map(o => o.delete()));
-          channel.setName(`closed-${await db.get(`ticket_${channel.id}_${message.guild.id}`).count}`)
+          channel.setName(`closed-${(await db.get(`ticket_${channel.id}_${message.guild.id}`))}`)
           let log_embed = new Discord.MessageEmbed()
             .setTitle(`Ticket closed`)
             .addField(`Ticket`, `<#${channel.id}>`)
@@ -165,7 +165,7 @@ client.on("message", async(message) =>{
   if (command == prefix + 'open') {
     if (!message.member.hasPermission('MANAGE_MESSAGES')) return message.lineReply(`:x: This command requires \`MANAGE_MESSAGES\` permission.`);
     let channel = message.mentions.channels.first() || message.channel;
-    const sfats = client.db.get(`Staff_${message.guild.id}`)
+    const sfats = await db.get(`Staff_${message.guild.id}`)
     if (!sfats) return message.lineReply({ embed: { description: `this server needs to set up their staff roles first! \`{prefix}setstaff\``, color: 0x5865F2 } })
     if (await db.get(`ticket_${channel.id}_${message.guild.id}`)) {
       let msg = await message.lineReply({ embed: { description: `Your order is executed after 5 seconds`, color: 0x5865F2 } })
@@ -180,13 +180,13 @@ client.on("message", async(message) =>{
             ATTACH_FILES: true,
             READ_MESSAGE_HISTORY: true,
           })
-          channel.updateOverwrite((await client.db.get(`Staff_${message.guild.id}.Admin`)), {
+          channel.updateOverwrite((await db.get(`Staff_${message.guild.id}.Admin`)), {
             VIEW_CHANNEL: true,
             SEND_MESSAGES: true,
             ATTACH_FILES: true,
             READ_MESSAGE_HISTORY: true,
           })
-          channel.updateOverwrite((await client.db.get(`Staff_${message.guild.id}.Moder`)), {
+          channel.updateOverwrite((await db.get(`Staff_${message.guild.id}.Moder`)), {
             VIEW_CHANNEL: true,
             SEND_MESSAGES: true,
             ATTACH_FILES: true,
@@ -210,7 +210,7 @@ client.on("message", async(message) =>{
   if (command == prefix + 'rename' || command == prefix + 'setname') {
     if (!message.member.hasPermission('MANAGE_MESSAGES')) return message.lineReply(`:x: This command requires \`MANAGE_MESSAGES\` permission.`);
     let channel = message.mentions.channels.first() || message.channel;
-    const sfats = client.db.get(`Staff_${message.guild.id}`)
+    const sfats = await db.get(`Staff_${message.guild.id}`)
     if (!sfats) return message.lineReply({ embed: { description: `this server needs to set up their staff roles first! \`{prefix}setstaff\``, color: 0x5865F2 } })
     if (await db.get(`ticket_${channel.id}_${message.guild.id}`)) {
       let args = message.content.split(' ').slice(1).join(' ');
@@ -229,33 +229,34 @@ client.on("message", async(message) =>{
     }
   }
   if (command == prefix + 'setstaff'){
+    console.log(args)
     if (!message.member.hasPermission('ADMINISTRATOR')) return message.lineReply(`:x: This command requires \`ADMINISTRATOR\` permission.`);
-    if (args.length < 2) return message.lineReply({ embed: { description: `Please mention an Admin role  (or iD), *then* a Mod role (or iD) with this command! `, color: 0x5865F2 } })
+    if (args.length != 2) return message.lineReply({ embed: { description: `Please provide an Admin role id, *then* a Mod role id with this command! `, color: 0x5865F2 } })
     if (message.mentions.roles.length < 2 && !Number(args[0]) && !Number(args[1])) return message.lineReply({ embed: { description: `Please mention an Admin role (or iD) first, *then* a Mod role (or iD) with this command! `, color: 0x5865F2 } })
-    const Admin = message.mentions.roles[0] || message.guild.roles.cache.find(args[0]);
-    const Moder = message.mentions.roles[1] || message.guild.roles.cache.find(args[1]);
+    const Admin = message.guild.roles.cache.get(args[0]);
+    const Moder = message.guild.roles.cache.get(args[1]);
     await db.set(`Staff_${message.guild.id}.Admin`, Admin.id)
     await db.set(`Staff_${message.guild.id}.Moder`, Moder.id)
-    message.delete()
     message.react("✅")
   }
   if (command == prefix + 'setchannels'){
     if (!message.member.hasPermission('ADMINISTRATOR')) return message.lineReply(`:x: This command requires \`ADMINISTRATOR\` permission.`);
-    if (args.length < 2) return message.lineReply({ embed: { description: `Please mention an Log Channel (or iD), *then* a Category (or iD) with this command! `, color: 0x5865F2 } })
+    if (args.length != 2) return message.lineReply({ embed: { description: `Please mention a channelid, *then* a categoryid with this command! `, color: 0x5865F2 } })
     if (message.mentions.roles.length < 2 && !Number(args[0]) && !Number(args[1])) return message.lineReply({ embed: { description: `Please mention an Log Channel (or iD), *then* a Category (or iD) with this command! `, color: 0x5865F2 } })
-    const txt = message.mentions.channels[0] || message.guild.channels.cache.find(args[0]);
-    const cat = message.mentions.channels[1] || message.guild.channels.cache.find(args[1]);
-    if (Admin.type !== "text") return message.channel.send("The first input should be a text channel");
-    if (Moder.type !== "category") return message.channel.send("The second input should be a text category");
+    const txt = message.guild.channels.cache.get(args[0]);
+    const cat = message.guild.channels.cache.get(args[1]);
+    if (txt.type !== "text") return message.channel.send("The first input should be a text channel");
+    if (cat.type !== "category") return message.channel.send("The second input should be a text category");
     await db.set(`Channels_${message.guild.id}.Log`, txt.id)
     await db.set(`Channels_${message.guild.id}.Cat`, cat.id)
-    message.delete()
     message.react("✅")
   }
   if (command == prefix + 'send' || command == prefix + 'ticket') {
     if (!message.member.hasPermission('ADMINISTRATOR')) return message.lineReply(`:x: This command requires \`ADMINISTRATOR\` permission.`);
-    const sfats = client.db.get(`Staff_${message.guild.id}`)
-    if (!sfats) return message.lineReply({ embed: { description: `this server needs to set up their staff roles first! \`{prefix}setstaff\``, color: 0x5865F2 } })
+    const sfats = await db.get(`Staff_${message.guild.id}`)
+    const sfas = await db.get(`Channels_${message.guild.id}`)
+    if (!sfats || sfats === null) return message.lineReply({ embed: { description: `This server needs to set up their staff roles first! \`${prefix}setstaff\``, color: 0x5865F2 } })
+    if (!sfas || sfas === null) return message.lineReply({ embed: { description: `This server needs to set up their ticket channels first! \`${prefix}setchannels\``, color: 0x5865F2 } })
     let idd = randomstring.generate({ length: 20 })
     let args = message.content.split(' ').slice(1).join(' ');
     if (!args) args = `Tickets`
@@ -274,7 +275,7 @@ client.on("message", async(message) =>{
     .setPlaceholder('Create A ticket!')
     .setMaxValues(1)
     .setMinValues(1)
-    .addOptions(button1, button2, button3)
+    .addOptions(button1, button3)
     let embed = new Discord.MessageEmbed()
       .setTitle(args)
       .setDescription("To create a ticket, select one of the options below from the menu.")
@@ -296,7 +297,7 @@ client.on("message", async(message) =>{
         reason: args,
         msgID: msg.id,
         id: idd,
-        options: [button1, button2, button3],
+        options: [button1,  button3],
         guildName: message.guild.name,
         guildAvatar: message.guild.iconURL(),
         channelID: message.channel.id
@@ -308,7 +309,7 @@ client.on("message", async(message) =>{
 
 client.on('clickMenu', async (button) => {
   console.log(button.values)
-  if (db.get(`tickets_${button.id}_${message.guild.id}`)) {
+  if (await db.get(`tickets_${button.id}_${button.message.guild.id}`)) {
     await button.reply.send(`Your ticket is being processed. Please wait `, true)
     await db.math(`counts_${button.message.id}_${button.message.guild.id}`, `+`, 1)
     let count = await db.get(`counts_${button.message.id}_${button.message.guild.id}`)
@@ -322,17 +323,17 @@ client.on('clickMenu', async (button) => {
             deny: ['VIEW_CHANNEL'],
           },
           {
-            id: (await client.db.get(`Staff_${message.guild.id}.Admin`)),
+            id: (await db.get(`Staff_${button.message.guild.id}.Admin`)),
             allow: ['VIEW_CHANNEL', `READ_MESSAGE_HISTORY`, `ATTACH_FILES`, `SEND_MESSAGES`,`MANAGE_MESSAGES`],
           },
           {
             id: button.clicker.user.id,
             allow: ['VIEW_CHANNEL', `READ_MESSAGE_HISTORY`, `ATTACH_FILES`, `SEND_MESSAGES`],
           },
-        ], parent: (await db.get(`category_${message.guild.id}`)), position: 1, topic: `A Ticket : <@!${button.clicker.user.id}>`, reason: "All rights reserved to Visa2Code"
+        ], parent: (await db.get(`Channels_${button.message.guild.id}.Cat`)), position: 1, topic: `A Ticket : <@!${button.clicker.user.id}>`, reason: "All rights reserved to Visa2Code"
       }).then(async channel => {
         channel = channel
-        await db.set(`ticket_${channel.id}_${message.guild.id}`, { count: count, ticket_by: button.clicker.user.id })
+        await db.set(`ticket_${channel.id}_${button.message.guild.id}`, { count: count, ticket_by: button.clicker.user.id })
       
         await button.reply.edit(`
   **Your ticket has been successfully opened** <#${channel.id}>`, true)
@@ -370,21 +371,21 @@ client.on('clickMenu', async (button) => {
                 deny: ['VIEW_CHANNEL'],
               },
               {
-                id: (await client.db.get(`Staff_${message.guild.id}.Admin`)),
+                id: (await db.get(`Staff_${button.message.guild.id}.Admin`)),
                 allow: ['VIEW_CHANNEL', `READ_MESSAGE_HISTORY`, `ATTACH_FILES`, `SEND_MESSAGES`,`MANAGE_MESSAGES`],
               },
               {
-                id: (await client.db.get(`Staff_${message.guild.id}.Moder`)),
+                id: (await db.get(`Staff_${button.message.guild.id}.Moder`)),
                 allow: ['VIEW_CHANNEL', `READ_MESSAGE_HISTORY`, `ATTACH_FILES`, `SEND_MESSAGES`,`MANAGE_MESSAGES`],
               },
               {
                 id: button.clicker.user.id,
                 allow: ['VIEW_CHANNEL', `READ_MESSAGE_HISTORY`, `ATTACH_FILES`, `SEND_MESSAGES`],
               },
-            ], parent: (await db.get(`category_${message.guild.id}`)), position: 1, topic: `A Ticket : <@!${button.clicker.user.id}>`, reason: "All rights reserved to Visa2Code"
+            ], parent: (await db.get(`Channels_${button.message.guild.id}.Cat`)), position: 1, topic: `A Ticket : <@!${button.clicker.user.id}>`, reason: "All rights reserved to Visa2Code"
           }).then(async channel => {
             channel = channel
-            await db.set(`ticket_${channel.id}_${message.guild.id}`, { count: count, ticket_by: button.clicker.user.id })
+            await db.set(`ticket_${channel.id}_${button.message.guild.id}`, { count: count, ticket_by: button.clicker.user.id })
           
             await button.reply.edit(`
       **Your ticket has been successfully opened** <#${channel.id}>`, true)
@@ -404,6 +405,7 @@ client.on('clickMenu', async (button) => {
               .setDescription(`Support will be with you soon.\n
       To close this ticket, interact with 🔒`)
             let idd = randomstring.generate({ length: 25 })
+            await db.set(`close_${button.clicker.user.id}`, idd)
             let bu1tton = new disbut.MessageButton()
               .setStyle(`gray`)
               .setEmoji(`🔒`)
@@ -417,25 +419,29 @@ client.on('clickMenu', async (button) => {
       }
     });
       client.on('clickButton', async (button1) => {
-        if (button1.id == idd) {
+        await button1.clicker.fetch()
+        let idd = randomstring.generate({ length: 25 })
+        await db.set(`close_${button1.clicker.user.id}_sure`, idd)
+        if (button1.id == (await db.get(`close_${button1.clicker.user.id}`))) {
           let bu0tton = new disbut.MessageButton()
             .setStyle(`red`)
             .setLabel(`close`)
-            .setID(idd + `sure`)
+            .setID(idd)
           await button1.reply.send(`Are you sure you want to close this ticket?`, { component: bu0tton, ephemeral: true });
         }
       })
         client.on('clickButton', async (button) => {
-          if (button.id == idd + `sure`) {
-          await button1.reply.edit(`Your order is executed after 5 seconds, and it will be closed`, true)   
-            let ch = channel
+          await button.clicker.fetch()
+          if (button.id == (await db.get(`close_${button.clicker.user.id}_sure`))) {
+          await button.reply.send(`Your order is executed after 5 seconds, and it will be closed`, true)   
+            let ch = button.channel
             if (!ch) return;
             setTimeout(async () => {
               try {
                 await ch.send({ embed: { description: `The ticket has already been closed <@!${button.clicker.user.id}>`, color: `YELLOW` } });
                 let type = 'member'
                 await Promise.all(ch.permissionOverwrites.filter(o => o.type === type).map(o => o.delete()));
-                ch.setName(`closed-${await db.get(`ticket_${ch.id}`).count}`)
+                ch.setName(`closed-ticket`)
                 let log_embed = new Discord.MessageEmbed()
                   .setTitle(`Ticket closed`)
                   .addField(`Ticket`, `<#${ch.id}>`)
@@ -444,7 +450,7 @@ client.on('clickMenu', async (button) => {
                   .setColor(`YELLOW`)
                 channelLog(log_embed)
               } catch (e) {
-                return message.channel.send(`An error occurred, please try again!`);
+                return button.channel.send(`An error occurred, please try again!`);
               }
             }, 4000)
           }
