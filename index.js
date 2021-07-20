@@ -41,7 +41,9 @@ client.on("message", async(message) =>{
 > \`${prefix}delete\` - Delete a specific ticket
 > \`${prefix}close\` - Close a specific ticket
 > \`${prefix}open\` - Open a specific ticket
-> \`${prefix}rename\` - Rename a specific ticket`)
+> \`${prefix}rename\` - Rename a specific ticket
+> \`${prefix}setchannels\` - set channels relating to ticket log and category
+> \`${prefix}setstaff\` - set staff roles`)
       .setTimestamp()
       .setColor(0x5865F2)
       .setFooter(`All rights belong to https://discord.gg/xtessK2DPA`)
