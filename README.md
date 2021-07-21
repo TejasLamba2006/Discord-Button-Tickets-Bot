@@ -14,7 +14,7 @@
  - `discord-buttons ^3.1.1` npm
  - `st.db` npm
  - `randomstring` npm
- - `express` npm
+ - `express` np
 
 # If you like the project, don't forget to give a star to it 🌟
 
@@ -28,5 +28,9 @@
 - [Discord Server](https://discord.gg/xtessK2DPA)
 - [Github](https://github.com/TeamRainbowDevs/)
 
-## License
+## Licens
 - [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0)
+
+## Credits
+[Single guild](https://github.com/TajuModding/Discord-Button-Tickets-Bot/tree/single-guild) - [TajuModding](https://github.com/TajuModding) 
+[Single guild](https://github.com/TajuModding/Discord-Button-Tickets-Bot) - [Xynnix](https://github.com/Xynnix)
