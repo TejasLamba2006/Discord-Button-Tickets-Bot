@@ -32,5 +32,5 @@
 - [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0)
 
 ## Credits
-[Single guild](https://github.com/TajuModding/Discord-Button-Tickets-Bot/tree/single-guild) - [TajuModding](https://github.com/TajuModding) 
+[Single guild](https://github.com/TajuModding/Discord-Button-Tickets-Bot/tree/single-guild) - [TajuModding](https://github.com/TajuModding) <br>
 [Single guild](https://github.com/TajuModding/Discord-Button-Tickets-Bot) - [Xynnix](https://github.com/Xynnix)
