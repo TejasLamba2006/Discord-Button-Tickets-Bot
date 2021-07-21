@@ -14,10 +14,12 @@
   "author": "Tejas Lamba#1924",
   "license": "ISC",
   "dependencies": {
-    "discord-buttons": "^3.1.1",
+    "discord-buttons": "^4.0.0",
     "discord-reply": "^0.1.2",
     "discord.js": "^12.5.3",
+    "dotenv": "^10.0.0",
     "express": "^4.17.1",
+    "quickmongo": "^3.0.2",
     "randomstring": "^1.2.1",
     "st.db": "^2.0.0"
   }

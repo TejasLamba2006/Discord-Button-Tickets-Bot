@@ -1,8 +1,7 @@
 {
-  "category_id":"",
-  "prefix":"!",
-  "status":"",
-  "log_channel_id":"",
-  "support_1":"",
-  "support_2":""
+  "prefix": "!",
+  "status":{
+    		"name": "tickets!",
+    		"type": "streaming"
+    	}
 }
