@@ -33,4 +33,4 @@
 
 ## Credits
 [Single guild](https://github.com/TajuModding/Discord-Button-Tickets-Bot/tree/single-guild) - [TajuModding](https://github.com/TajuModding) <br>
-[Single guild](https://github.com/TajuModding/Discord-Button-Tickets-Bot) - [Xynnix](https://github.com/Xynnix)
+[Multi guild](https://github.com/TajuModding/Discord-Button-Tickets-Bot) - [Xynnix](https://github.com/Xynnix)
